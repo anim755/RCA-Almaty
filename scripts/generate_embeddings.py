@@ -7,7 +7,6 @@ input_folder = "data/chunks/almaty"
 output_path = "data/embeddings/almaty_embeddings.json"
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-# Загружаем лёгкую модель (можно заменить позже на более точную)
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 all_embeddings = []
