@@ -6,8 +6,17 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from numpy.linalg import norm
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(title="RCA — Almaty Semantic Search API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 with open("data/embeddings/almaty_embeddings.json", "r", encoding="utf-8") as f:
     data = json.load(f)
