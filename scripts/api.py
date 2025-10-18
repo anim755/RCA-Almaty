@@ -8,13 +8,12 @@ from numpy.linalg import norm
 
 app = FastAPI(title="RCA — Almaty Semantic Search API")
 
-# Загружаем эмбеддинги и модель
+
 with open("data/embeddings/almaty_embeddings.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-# Преобразуем эмбеддинги в numpy для быстрого сравнения
 embeddings = np.array([np.array(item["embedding"]) for item in data])
 
 class Answer(BaseModel):
