@@ -1,1 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCA — Almaty Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #64b3f4, #c2e59c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #64b3f4;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 2px rgba(100, 179, 244, 0.2);
+        }
+
+        textarea::placeholder {
+            color: #888;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #64b3f4, #c2e59c);
+            color: #0c0c0c;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(100, 179, 244, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(100, 179, 244, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: width 0.3s, height 0.3s, top 0.3s, left 0.3s;
+        }
+
+        button:active::after {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+        }
+
+        .response-section, .sources-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #64b3f4;
+            font-weight: 600;
+        }
+
+        #response {
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        #sources {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .source-item {
+            background: rgba(100, 179, 244, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(100, 179, 244, 0.3);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #64b3f4;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            textarea {
+                min-height: 100px;
+                padding: 15px;
+            }
+            
+            button {
+                width: 100%;
+                padding: 18px 40px;
+            }
+            
+            .response-section, .sources-section {
+                padding: 20px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🏙 RCA — Almaty Assistant</h1>
+            <p>Enter your question about permits or building regulations</p>
+        </header>
+
+        <section class="input-section">
+            <textarea id="question" placeholder="Example: What documents are needed for a construction permit?"></textarea>
+            <div class="button-container">
+                <button onclick="ask()" id="ask-button">Ask Question</button>
+            </div>
+        </section>
+
+        <section class="response-section">
+            <h2 class="section-title">Answer</h2>
+            <div id="response">The answer will appear here...</div>
+        </section>
+
+        <section class="sources-section">
+            <h2 class="section-title">Sources</h2>
+            <div id="sources">Sources will appear here after the answer</div>
+        </section>
+    </div>
+
+    <script>
+        async function ask() {
+            const question = document.getElementById('question').value.trim();
+            const responseElement = document.getElementById('response');
+            const sourcesElement = document.getElementById('sources');
+            const button = document.getElementById('ask-button');
+
+            if (!question) {
+                responseElement.textContent = 'Please enter your question';
+                responseElement.style.color = '#ff6b6b';
+                return;
+            }
+
+            responseElement.innerHTML = '<span class="loading"></span>⌛ Searching for answer...';
+            responseElement.style.color = '#e0e0e0';
+            sourcesElement.innerHTML = '';
+            button.disabled = true;
+            button.textContent = 'Searching...';
+
+            try {
+                const response = await fetch(`http://localhost:8000/ask?question=${encodeURIComponent(question)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                responseElement.textContent = data.answer || 'Answer not found';
+                responseElement.classList.add('fade-in');
+
+                if (data.sources && data.sources.length > 0) {
+                    sourcesElement.innerHTML = data.sources.map(source => 
+                        `<div class="source-item">${source}</div>`
+                    ).join('');
+                    sourcesElement.classList.add('fade-in');
+                } else {
+                    sourcesElement.innerHTML = '<div class="source-item">No sources specified</div>';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                responseElement.textContent = '❌ Error getting answer. Please check API connection.';
+                responseElement.style.color = '#ff6b6b';
+                sourcesElement.innerHTML = '';
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Ask Question';
+            }
+        }
+
+        document.getElementById('question').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+                ask();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-in';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
